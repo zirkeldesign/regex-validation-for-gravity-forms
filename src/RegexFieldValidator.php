@@ -206,7 +206,7 @@ class RegexFieldValidator
     /**
      * Add tooltip for regex validation
      *
-     * @param array<string, string> $tooltips
+     * @param  array<string, string>  $tooltips
      * @return array<string, string>
      */
     public function addRegexTooltip(array $tooltips): array
@@ -223,8 +223,8 @@ class RegexFieldValidator
     /**
      * Validate field against regex pattern (server-side)
      *
-     * @param array{is_valid: bool, message: string} $result
-     * @param array<string, mixed> $form
+     * @param  array{is_valid: bool, message: string}  $result
+     * @param  array<string, mixed>  $form
      * @return array{is_valid: bool, message: string}
      */
     public function validateRegex(array $result, mixed $value, array $form, object $field): array
@@ -275,7 +275,7 @@ class RegexFieldValidator
     /**
      * Enqueue client-side regex validation script
      *
-     * @param array<string, mixed> $form
+     * @param  array<string, mixed>  $form
      * @return array<string, mixed>
      */
     public function enqueueClientValidation(array $form): array

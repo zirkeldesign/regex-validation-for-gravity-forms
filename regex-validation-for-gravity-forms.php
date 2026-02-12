@@ -28,8 +28,8 @@ define('GF_REGEX_VALIDATION_DIR', plugin_dir_path(__FILE__));
 /**
  * Load Composer autoloader.
  */
-if (file_exists(GF_REGEX_VALIDATION_DIR . 'vendor/autoload.php')) {
-    require_once GF_REGEX_VALIDATION_DIR . 'vendor/autoload.php';
+if (file_exists(GF_REGEX_VALIDATION_DIR.'vendor/autoload.php')) {
+    require_once GF_REGEX_VALIDATION_DIR.'vendor/autoload.php';
 }
 
 /**
@@ -54,5 +54,5 @@ add_action('plugins_loaded', static function (): void {
         return;
     }
 
-    new \ZirkelDesign\GFRegexValidation\RegexFieldValidator();
+    new \ZirkelDesign\GFRegexValidation\RegexFieldValidator;
 });
