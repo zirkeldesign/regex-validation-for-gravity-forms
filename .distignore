@@ -6,6 +6,7 @@
 .phpunit.result.cache
 AGENTS.md
 composer.lock
+pint.json
 phpunit.xml
 phpstan.neon
 tests

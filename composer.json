@@ -1,8 +1,15 @@
 {
   "name": "zirkeldesign/regex-validation-for-gravity-forms",
   "description": "Adds custom regex validation with Unicode support and presets to Gravity Forms fields.",
-  "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
+  "type": "wordpress-plugin",
+  "keywords": [
+    "wordpress",
+    "gravity-forms",
+    "regex",
+    "validation",
+    "unicode"
+  ],
   "authors": [
     {
       "name": "zirkel.design",
@@ -15,21 +22,17 @@
     "issues": "https://github.com/zirkeldesign/regex-validation-for-gravity-forms/issues",
     "source": "https://github.com/zirkeldesign/regex-validation-for-gravity-forms"
   },
-  "keywords": [
-    "wordpress",
-    "gravity-forms",
-    "regex",
-    "validation",
-    "unicode"
-  ],
   "require": {
     "php": "^8.2"
   },
   "require-dev": {
+    "laravel/pint": "^1.27",
     "pestphp/pest": "^3.0",
     "php-stubs/wordpress-stubs": "^6.7",
     "szepeviktor/phpstan-wordpress": "^2.0"
   },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
   "autoload": {
     "psr-4": {
       "ZirkelDesign\\GFRegexValidation\\": "src/"
@@ -45,7 +48,5 @@
       "pestphp/pest-plugin": true
     },
     "sort-packages": true
-  },
-  "minimum-stability": "stable",
-  "prefer-stable": true
+  }
 }
