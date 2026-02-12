@@ -2,9 +2,9 @@
 Contributors: zirkeldesign
 Tags: gravity forms, regex, validation, unicode, pattern
 Requires at least: 6.0
-Tested up to: 6.9.1
+Tested up to: 6.9
 Requires PHP: 8.2
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,6 +106,14 @@ Client-side validation provides instant user feedback but should never be relied
 3. Client-side validation error message
 
 == Changelog ==
+
+= 1.0.1 =
+* Fix WordPress Plugin Check (PCP) compliance issues
+* Escape all output per WordPress security guidelines
+* Replace error_log with _doing_it_wrong for invalid regex patterns
+* Add direct file access protection to source files
+* Remove deprecated load_plugin_textdomain call
+* Fix "Tested up to" version format in readme
 
 = 1.0.0 =
 * Initial release

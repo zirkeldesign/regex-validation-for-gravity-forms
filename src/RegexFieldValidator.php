@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace ZirkelDesign\GFRegexValidation;
 
+if (! defined('ABSPATH')) {
+    exit;
+}
+
 /**
  * Gravity Forms Regex Field Validator
  *
@@ -236,11 +240,16 @@ class RegexFieldValidator
         }
 
         if (! self::isValidRegex($pattern)) {
-            error_log(sprintf(
-                'Regex Validation for Gravity Forms: Invalid regex pattern "%s" for field ID %d',
-                $pattern,
-                $field->id
-            ));
+            _doing_it_wrong(
+                __METHOD__,
+                sprintf(
+                    /* translators: 1: regex pattern, 2: field ID */
+                    esc_html__('Invalid regex pattern "%1$s" on field ID %2$d.', 'regex-validation-for-gravity-forms'),
+                    esc_html($pattern),
+                    absint($field->id)
+                ),
+                '1.0.0'
+            );
 
             return $result;
         }
@@ -305,51 +314,52 @@ class RegexFieldValidator
         }
 
         $formId = $form['id'];
-        $configJson = wp_json_encode($fieldsWithRegex);
 
-        add_action('gform_register_init_scripts', function () use ($formId, $configJson): void {
-            $script = <<<JS
-                var fields = {$configJson};
+        add_action('gform_register_init_scripts', function () use ($formId, $fieldsWithRegex): void {
+            ob_start();
+            ?>
+            var fields = <?php echo wp_json_encode($fieldsWithRegex); ?>;
 
-                fields.forEach(function(fieldConfig) {
-                    var fieldWrapper = document.querySelector('#field_{$formId}_' + fieldConfig.id);
-                    if (!fieldWrapper) return;
+            fields.forEach(function(fieldConfig) {
+                var fieldWrapper = document.querySelector('#field_<?php echo absint($formId); ?>_' + fieldConfig.id);
+                if (!fieldWrapper) return;
 
-                    var inputs = fieldWrapper.querySelectorAll('input:not([type=hidden])');
-                    var regex;
+                var inputs = fieldWrapper.querySelectorAll('input:not([type=hidden])');
+                var regex;
 
-                    try {
-                        regex = new RegExp(fieldConfig.pattern, 'u');
-                    } catch (e) {
-                        return;
-                    }
+                try {
+                    regex = new RegExp(fieldConfig.pattern, 'u');
+                } catch (e) {
+                    return;
+                }
 
-                    inputs.forEach(function(input) {
-                        input.addEventListener('change', function() {
-                            var wrapper = this.closest('.gfield');
-                            var msgId = 'regex_validation_message_' + fieldConfig.id + '_' + this.id;
-                            var existingMsg = document.getElementById(msgId);
+                inputs.forEach(function(input) {
+                    input.addEventListener('change', function() {
+                        var wrapper = this.closest('.gfield');
+                        var msgId = 'regex_validation_message_' + fieldConfig.id + '_' + this.id;
+                        var existingMsg = document.getElementById(msgId);
 
-                            if (this.value === '' || regex.test(this.value)) {
-                                if (existingMsg) existingMsg.remove();
-                                if (wrapper && !wrapper.querySelector('.validation_message')) {
-                                    wrapper.classList.remove('gfield_error');
-                                }
-                            } else {
-                                if (!existingMsg) {
-                                    var msg = document.createElement('div');
-                                    msg.id = msgId;
-                                    msg.className = 'validation_message gfield_description';
-                                    msg.setAttribute('role', 'alert');
-                                    msg.textContent = fieldConfig.message;
-                                    this.parentNode.insertBefore(msg, this.nextSibling);
-                                }
-                                if (wrapper) wrapper.classList.add('gfield_error');
+                        if (this.value === '' || regex.test(this.value)) {
+                            if (existingMsg) existingMsg.remove();
+                            if (wrapper && !wrapper.querySelector('.validation_message')) {
+                                wrapper.classList.remove('gfield_error');
                             }
-                        });
+                        } else {
+                            if (!existingMsg) {
+                                var msg = document.createElement('div');
+                                msg.id = msgId;
+                                msg.className = 'validation_message gfield_description';
+                                msg.setAttribute('role', 'alert');
+                                msg.textContent = fieldConfig.message;
+                                this.parentNode.insertBefore(msg, this.nextSibling);
+                            }
+                            if (wrapper) wrapper.classList.add('gfield_error');
+                        }
                     });
                 });
-            JS;
+            });
+            <?php
+            $script = ob_get_clean();
 
             \GFFormDisplay::add_init_script($formId, "regex_validation_{$formId}", \GFFormDisplay::ON_PAGE_RENDER, $script);
         });
@@ -375,11 +385,7 @@ class RegexFieldValidator
      */
     public static function isValidRegex(string $pattern): bool
     {
-        set_error_handler(static fn () => null);
-        $isValid = @preg_match($pattern, '') !== false;
-        restore_error_handler();
-
-        return $isValid;
+        return @preg_match($pattern, '') !== false;
     }
 
     /**

@@ -4,7 +4,7 @@
  * Plugin Name:       Regex Validation for Gravity Forms
  * Plugin URI:        https://github.com/zirkeldesign/regex-validation-for-gravity-forms
  * Description:       Adds custom regex validation with Unicode support and presets to Gravity Forms fields. Includes both server-side and client-side validation.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            zirkel.design
  * Author URI:        https://zirkel.design
  * License:           GPL-2.0-or-later
@@ -21,27 +21,16 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('GF_REGEX_VALIDATION_VERSION', '1.0.0');
+define('GF_REGEX_VALIDATION_VERSION', '1.0.1');
 define('GF_REGEX_VALIDATION_FILE', __FILE__);
 define('GF_REGEX_VALIDATION_DIR', plugin_dir_path(__FILE__));
 
 /**
  * Load Composer autoloader.
  */
-if (file_exists($autoloader = GF_REGEX_VALIDATION_DIR . 'vendor/autoload.php')) {
-    require_once $autoloader;
+if (file_exists(GF_REGEX_VALIDATION_DIR . 'vendor/autoload.php')) {
+    require_once GF_REGEX_VALIDATION_DIR . 'vendor/autoload.php';
 }
-
-/**
- * Load plugin textdomain.
- */
-add_action('init', static function (): void {
-    load_plugin_textdomain(
-        'regex-validation-for-gravity-forms',
-        false,
-        dirname(plugin_basename(GF_REGEX_VALIDATION_FILE)) . '/languages'
-    );
-});
 
 /**
  * Initialize the plugin after all plugins are loaded.
