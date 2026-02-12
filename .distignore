@@ -1,0 +1,13 @@
+.git
+.github
+.gitignore
+.distignore
+.phpunit.cache
+.phpunit.result.cache
+AGENTS.md
+composer.json
+composer.lock
+phpunit.xml
+phpstan.neon
+tests
+vendor
