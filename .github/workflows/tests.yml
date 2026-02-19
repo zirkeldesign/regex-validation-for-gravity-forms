@@ -17,14 +17,49 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.3'
           coverage: none
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
 
       - name: Run Pint
-        run: vendor/bin/pint --test
+        run: composer format:test
+
+  phpstan:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run PHPStan
+        run: composer phpstan
+
+  javascript:
+    name: JavaScript Formatting
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Check Prettier formatting
+        run: bun run format:check
 
   tests:
     name: PHP ${{ matrix.php }}
@@ -47,4 +82,4 @@ jobs:
         run: composer install --no-interaction --prefer-dist
 
       - name: Run tests
-        run: vendor/bin/pest
+        run: composer test
