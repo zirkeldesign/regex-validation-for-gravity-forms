@@ -8,25 +8,31 @@
 
     console.log('GF Regex Validation: Script loaded');
     
-    // Add setting to supported field types
-    window.gfRegexValidation = window.gfRegexValidation || {};
-    
-    console.log('GF Regex Validation: Data available:', window.gfRegexValidation);
-    
-    // Add settings to field types
-    const fieldTypes = window.gfRegexValidation.fieldTypes || [];
-    console.log('GF Regex Validation: Field types to configure:', fieldTypes);
-    
-    fieldTypes.forEach(function(type) {
-        if (typeof fieldSettings !== 'undefined' && typeof fieldSettings[type] !== 'undefined') {
-            console.log('GF Regex Validation: Adding settings to field type:', type);
-            fieldSettings[type] += ', .regex_validation_setting';
-        } else {
-            console.log('GF Regex Validation: Field type not found or fieldSettings undefined:', type);
-        }
+    // Wait for DOM to be ready before modifying fieldSettings
+    $(document).ready(function() {
+        console.log('GF Regex Validation: DOM ready');
+        
+        // Add setting to supported field types
+        window.gfRegexValidation = window.gfRegexValidation || {};
+        
+        console.log('GF Regex Validation: Data available:', window.gfRegexValidation);
+        console.log('GF Regex Validation: fieldSettings available:', typeof fieldSettings !== 'undefined');
+        
+        // Add settings to field types
+        const fieldTypes = window.gfRegexValidation.fieldTypes || [];
+        console.log('GF Regex Validation: Field types to configure:', fieldTypes);
+        
+        fieldTypes.forEach(function(type) {
+            if (typeof fieldSettings !== 'undefined' && typeof fieldSettings[type] !== 'undefined') {
+                console.log('GF Regex Validation: Adding settings to field type:', type);
+                fieldSettings[type] += ', .regex_validation_setting';
+            } else {
+                console.log('GF Regex Validation: Field type not found or fieldSettings undefined:', type);
+            }
+        });
+        
+        console.log('GF Regex Validation: fieldSettings after modification:', typeof fieldSettings !== 'undefined' ? fieldSettings : 'undefined');
     });
-    
-    console.log('GF Regex Validation: fieldSettings after modification:', typeof fieldSettings !== 'undefined' ? fieldSettings : 'undefined');
     
     // Initialize when field settings are loaded
     $(document).on('gform_load_field_settings', function(event, field, form) {
