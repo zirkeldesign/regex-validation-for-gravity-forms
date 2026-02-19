@@ -14,7 +14,7 @@ Adds custom regex validation with Unicode support and presets to Gravity Forms f
 
 ## Requirements
 
-- PHP 8.2+
+- PHP 8.3+
 - WordPress 6.0+
 - Gravity Forms 2.5+
 
