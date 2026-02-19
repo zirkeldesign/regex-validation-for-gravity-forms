@@ -13,6 +13,7 @@ AGENTS.md
 CHANGELOG.md
 README.md
 get-version.php
+.version
 composer.lock
 package.json
 bun.lock
