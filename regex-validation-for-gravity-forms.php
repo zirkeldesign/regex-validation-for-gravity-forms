@@ -11,7 +11,7 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       regex-validation-for-gravity-forms
  * Domain Path:       /languages
- * Requires PHP:      8.2
+ * Requires PHP:      8.3
  * Requires at least: 6.0
  */
 
