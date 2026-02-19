@@ -3,25 +3,28 @@
  *
  * Handles the field editor UI for regex validation settings in the Gravity Forms form builder.
  */
-( function( $ ) {
+( function ( $ ) {
 	'use strict';
 
 	// Cache reference to global config object
 	const config = window.gfRegexValidation || {};
 
 	// Wait for DOM to be ready before modifying fieldSettings
-	$( document ).ready( function() {
+	$( document ).ready( function () {
 		const fieldTypes = config.fieldTypes || [];
 
-		fieldTypes.forEach( function( type ) {
-			if ( typeof fieldSettings !== 'undefined' && typeof fieldSettings[ type ] !== 'undefined' ) {
+		fieldTypes.forEach( function ( type ) {
+			if (
+				typeof fieldSettings !== 'undefined' &&
+				typeof fieldSettings[ type ] !== 'undefined'
+			) {
 				fieldSettings[ type ] += ', .regex_validation_setting';
 			}
 		} );
 	} );
 
 	// Initialize when field settings are loaded
-	$( document ).on( 'gform_load_field_settings', function( event, field ) {
+	$( document ).on( 'gform_load_field_settings', function ( event, field ) {
 		$( '#field_regex_pattern' ).val( field.regexPattern || '' );
 		$( '#field_regex_message' ).val( field.regexMessage || '' );
 
@@ -40,7 +43,7 @@
 	} );
 
 	// Function to set preset values
-	window.SetRegexPreset = function( presetKey ) {
+	window.SetRegexPreset = function ( presetKey ) {
 		if ( ! presetKey ) {
 			return;
 		}
@@ -55,5 +58,4 @@
 			$( '#field_regex_message' ).val( preset.message );
 		}
 	};
-
-}( jQuery ) );
+} )( jQuery );

@@ -1,5 +1,6 @@
 {
   "chat.tools.terminal.autoApprove": {
-    "composer": true
+    "composer": true,
+    "bun": true
   }
 }
