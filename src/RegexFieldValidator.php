@@ -117,7 +117,7 @@ class RegexFieldValidator
         // Depend on gform_form_editor to ensure fieldSettings is available
         wp_register_script(
             'gf-regex-validation-admin',
-            \GF_REGEX_VALIDATION_URL . 'assets/js/admin-field-editor.js',
+            \GF_REGEX_VALIDATION_URL.'assets/js/admin-field-editor.js',
             ['jquery', 'gform_form_editor'],
             \GF_REGEX_VALIDATION_VERSION,
             false
