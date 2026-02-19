@@ -90,13 +90,13 @@ class RegexFieldValidator
     {
         // Register scripts first on init
         add_action('init', [$this, 'registerScripts']);
-        
+
         // Enqueue on admin pages
         add_action('admin_enqueue_scripts', [$this, 'enqueueEditorAssets'], 20);
-        
+
         // Add to Gravity Forms noconflict mode whitelist
         add_filter('gform_noconflict_scripts', [$this, 'addNoconflictScripts']);
-        
+
         add_action('gform_field_standard_settings', [$this, 'addRegexSettings'], 10, 2);
         add_filter('gform_tooltips', [$this, 'addRegexTooltip']);
         add_filter('gform_field_validation', [$this, 'validateRegex'], 10, 4);
@@ -112,7 +112,7 @@ class RegexFieldValidator
         if (! class_exists('GFCommon')) {
             return;
         }
-        
+
         // Register admin field editor script
         // Depend on gform_form_editor to ensure fieldSettings is available
         wp_register_script(
@@ -126,7 +126,7 @@ class RegexFieldValidator
 
     /**
      * Add script to Gravity Forms noconflict mode whitelist
-     * 
+     *
      * Gravity Forms uses noconflict mode to prevent plugin conflicts.
      * We need to whitelist our script so it loads on GF admin pages.
      *
@@ -136,7 +136,7 @@ class RegexFieldValidator
     public function addNoconflictScripts(array $scripts): array
     {
         $scripts[] = 'gf-regex-validation-admin';
-        
+
         return $scripts;
     }
 
@@ -210,10 +210,10 @@ class RegexFieldValidator
 
         $presets = self::getPresets();
         $fieldTypes = $this->getSupportedFieldTypes();
-        
+
         // Enqueue the already-registered script
         wp_enqueue_script('gf-regex-validation-admin');
-        
+
         // Add inline data before the script using IIFE to avoid global scope pollution
         wp_add_inline_script(
             'gf-regex-validation-admin',
