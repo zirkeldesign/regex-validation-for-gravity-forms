@@ -214,11 +214,17 @@ class RegexFieldValidator
         // Enqueue the already-registered script
         wp_enqueue_script('gf-regex-validation-admin');
         
-        // Add inline data before the script
+        // Add inline data before the script using IIFE to avoid global scope pollution
         wp_add_inline_script(
             'gf-regex-validation-admin',
             sprintf(
-                'window.gfRegexValidation = window.gfRegexValidation || {}; window.gfRegexValidation.presets = %s; window.gfRegexValidation.fieldTypes = %s;',
+                '(function() {
+                    const presets = %s;
+                    const fieldTypes = %s;
+                    window.gfRegexValidation = window.gfRegexValidation || {};
+                    window.gfRegexValidation.presets = presets;
+                    window.gfRegexValidation.fieldTypes = fieldTypes;
+                })();',
                 wp_json_encode($presets),
                 wp_json_encode($fieldTypes)
             ),
