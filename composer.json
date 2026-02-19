@@ -61,9 +61,10 @@
       "@php -r \"echo '🔨 Building distribution archive...\\n';\"",
       "composer install --no-dev --optimize-autoloader --quiet",
       "mkdir -p dist",
-      "wp dist-archive . dist/regex-validation-for-gravity-forms.zip",
+      "@php get-version.php > .version",
+      "wp dist-archive . dist/regex-validation-for-gravity-forms-$(cat .version).zip",
       "composer install --quiet",
-      "@php -r \"echo '✅ Distribution archive created: dist/regex-validation-for-gravity-forms.zip\\n';\""
+      "@php -r \"echo '✅ Distribution archive created: dist/regex-validation-for-gravity-forms-' . trim(file_get_contents('.version')) . '.zip\\n'; unlink('.version');\""
     ],
     "format": "pint",
     "format:test": "pint --test",

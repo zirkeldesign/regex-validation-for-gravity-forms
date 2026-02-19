@@ -12,6 +12,7 @@ dist/
 AGENTS.md
 CHANGELOG.md
 README.md
+get-version.php
 composer.lock
 package.json
 bun.lock
