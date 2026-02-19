@@ -28,7 +28,9 @@
   "require-dev": {
     "laravel/pint": "^1.27",
     "pestphp/pest": "^3.0",
+    "php-stubs/gravity-forms-stubs": "^2.8",
     "php-stubs/wordpress-stubs": "^6.7",
+    "phpstan/phpstan": "^2.0",
     "szepeviktor/phpstan-wordpress": "^2.0"
   },
   "minimum-stability": "stable",
@@ -48,5 +50,11 @@
       "pestphp/pest-plugin": true
     },
     "sort-packages": true
+  },
+  "scripts": {
+    "test": "pest",
+    "phpstan": "phpstan analyse --memory-limit=1G",
+    "format": "pint",
+    "format:test": "pint --test"
   }
 }
