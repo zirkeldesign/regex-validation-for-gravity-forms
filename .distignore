@@ -12,7 +12,6 @@ dist/
 AGENTS.md
 CHANGELOG.md
 README.md
-composer.json
 composer.lock
 package.json
 bun.lock
@@ -21,3 +20,4 @@ phpunit.xml
 phpstan.neon
 tests/
 node_modules/
+.DS_Store

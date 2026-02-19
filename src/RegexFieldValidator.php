@@ -204,6 +204,9 @@ class RegexFieldValidator
         }
 
         // Check if we're on the form editor (not form list)
+        // We only check if 'id' exists to determine page context for script loading.
+        // The value is not used or processed - Gravity Forms handles all validation/nonces.
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if (! isset($_GET['id']) || empty($_GET['id'])) {
             return;
         }
