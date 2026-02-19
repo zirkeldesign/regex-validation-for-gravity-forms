@@ -4,7 +4,7 @@ Tags: gravity forms, regex, validation, unicode, pattern
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 8.2
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -107,13 +107,14 @@ Client-side validation provides instant user feedback but should never be relied
 
 == Changelog ==
 
+= 1.0.2 =
+* Fixed: Admin field settings not appearing in Gravity Forms editor
+* Improved: Code quality and WordPress coding standards compliance
+* Enhanced: Development tooling for better maintainability
+
 = 1.0.1 =
-* Fix WordPress Plugin Check (PCP) compliance issues
-* Escape all output per WordPress security guidelines
-* Replace error_log with _doing_it_wrong for invalid regex patterns
-* Add direct file access protection to source files
-* Remove deprecated load_plugin_textdomain call
-* Fix "Tested up to" version format in readme
+* Fixed: WordPress Plugin Check compliance issues
+* Improved: Security and code standards
 
 = 1.0.0 =
 * Initial release

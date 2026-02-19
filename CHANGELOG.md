@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-02-19
+
+### Fixed
+- Load admin scripts properly in Gravity Forms noconflict mode
+- Fix script dependency timing by adding `gform_form_editor` dependency
+- Wrap field settings modification in DOM ready handler
+
+### Changed
+- Extract inline JavaScript to separate `assets/js/admin-field-editor.js` file
+- Use `wp_add_inline_script()` with IIFE pattern for passing data to avoid global scope pollution
+- Format JavaScript to WordPress Coding Standards with tabs
+
+### Added
+- PHPStan level 6 static analysis with Gravity Forms stubs
+- Prettier with WordPress config for consistent JavaScript formatting
+- EditorConfig for consistent code style across editors
+- WordPress plugin development guidelines document
+- Add `gform_noconflict_scripts` filter to whitelist admin script
+
 ## [1.0.1] - 2026-02-12
 
 ### Fixed
