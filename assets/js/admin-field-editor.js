@@ -1,60 +1,59 @@
 /**
  * Regex Validation for Gravity Forms - Admin Field Editor
- *   
+ *
  * Handles the field editor UI for regex validation settings in the Gravity Forms form builder.
  */
-(function($) {
-    'use strict';
+( function( $ ) {
+	'use strict';
 
-    // Wait for DOM to be ready before modifying fieldSettings
-    $(document).ready(function() {
-        // Add setting to supported field types
-        window.gfRegexValidation = window.gfRegexValidation || {};
-        
-        // Add settings to field types
-        const fieldTypes = window.gfRegexValidation.fieldTypes || [];
-        
-        fieldTypes.forEach(function(type) {
-            if (typeof fieldSettings !== 'undefined' && typeof fieldSettings[type] !== 'undefined') {
-                fieldSettings[type] += ', .regex_validation_setting';
-            }
-        });
-    });
-    
-    // Initialize when field settings are loaded
-    $(document).on('gform_load_field_settings', function(event, field, form) {
-        $('#field_regex_pattern').val(field.regexPattern || '');
-        $('#field_regex_message').val(field.regexMessage || '');
+	// Cache reference to global config object
+	const config = window.gfRegexValidation || {};
 
-        // Set preset dropdown
-        const presets = window.gfRegexValidation.presets || {};
-        let selectedPreset = '';
+	// Wait for DOM to be ready before modifying fieldSettings
+	$( document ).ready( function() {
+		const fieldTypes = config.fieldTypes || [];
 
-        for (const [key, preset] of Object.entries(presets)) {
-            if (field.regexPattern === preset.pattern) {
-                selectedPreset = key;
-                break;
-            }
-        }
+		fieldTypes.forEach( function( type ) {
+			if ( typeof fieldSettings !== 'undefined' && typeof fieldSettings[ type ] !== 'undefined' ) {
+				fieldSettings[ type ] += ', .regex_validation_setting';
+			}
+		} );
+	} );
 
-        $('#field_regex_preset').val(selectedPreset);
-    });
+	// Initialize when field settings are loaded
+	$( document ).on( 'gform_load_field_settings', function( event, field ) {
+		$( '#field_regex_pattern' ).val( field.regexPattern || '' );
+		$( '#field_regex_message' ).val( field.regexMessage || '' );
 
-    // Function to set preset values
-    window.SetRegexPreset = function(presetKey) {
-        if (!presetKey) {
-            return;
-        }
+		// Set preset dropdown
+		const presets = config.presets || {};
+		let selectedPreset = '';
 
-        const presets = window.gfRegexValidation.presets || {};
-        const preset = presets[presetKey];
+		for ( const [ key, preset ] of Object.entries( presets ) ) {
+			if ( field.regexPattern === preset.pattern ) {
+				selectedPreset = key;
+				break;
+			}
+		}
 
-        if (preset) {
-            SetFieldProperty('regexPattern', preset.pattern);
-            SetFieldProperty('regexMessage', preset.message);
-            $('#field_regex_pattern').val(preset.pattern);
-            $('#field_regex_message').val(preset.message);
-        }
-    };
+		$( '#field_regex_preset' ).val( selectedPreset );
+	} );
 
-})(jQuery);
+	// Function to set preset values
+	window.SetRegexPreset = function( presetKey ) {
+		if ( ! presetKey ) {
+			return;
+		}
+
+		const presets = config.presets || {};
+		const preset = presets[ presetKey ];
+
+		if ( preset ) {
+			SetFieldProperty( 'regexPattern', preset.pattern );
+			SetFieldProperty( 'regexMessage', preset.message );
+			$( '#field_regex_pattern' ).val( preset.pattern );
+			$( '#field_regex_message' ).val( preset.message );
+		}
+	};
+
+}( jQuery ) );
