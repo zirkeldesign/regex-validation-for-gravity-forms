@@ -57,6 +57,14 @@
     "sort-packages": true
   },
   "scripts": {
+    "dist": [
+      "@php -r \"echo '🔨 Building distribution archive...\\n';\"",
+      "composer install --no-dev --optimize-autoloader --quiet",
+      "mkdir -p dist",
+      "wp dist-archive . dist/regex-validation-for-gravity-forms.zip",
+      "composer install --quiet",
+      "@php -r \"echo '✅ Distribution archive created: dist/regex-validation-for-gravity-forms.zip\\n';\""
+    ],
     "format": "pint",
     "format:test": "pint --test",
     "phpstan": "phpstan analyse --memory-limit=1G",
