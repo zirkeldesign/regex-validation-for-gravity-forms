@@ -88,11 +88,36 @@ class RegexFieldValidator
 
     private function registerHooks(): void
     {
+        // Register scripts first on init
+        add_action('init', [$this, 'registerScripts']);
+        
+        // Enqueue on admin pages
+        add_action('admin_enqueue_scripts', [$this, 'enqueueEditorAssets'], 20);
+        
         add_action('gform_field_standard_settings', [$this, 'addRegexSettings'], 10, 2);
-        add_action('gform_editor_js', [$this, 'editorScript']);
         add_filter('gform_tooltips', [$this, 'addRegexTooltip']);
         add_filter('gform_field_validation', [$this, 'validateRegex'], 10, 4);
         add_filter('gform_pre_render', [$this, 'enqueueClientValidation']);
+    }
+
+    /**
+     * Register scripts and styles early
+     */
+    public function registerScripts(): void
+    {
+        // Ensure Gravity Forms is loaded before registering scripts
+        if (! class_exists('GFCommon')) {
+            return;
+        }
+        
+        // Register admin field editor script
+        wp_register_script(
+            'gf-regex-validation-admin',
+            \GF_REGEX_VALIDATION_URL . 'assets/js/admin-field-editor.js',
+            ['jquery'],
+            \GF_REGEX_VALIDATION_VERSION,
+            false
+        );
     }
 
     /**
@@ -149,30 +174,36 @@ class RegexFieldValidator
     }
 
     /**
-     * Add JavaScript for field editor
+     * Enqueue admin field editor assets
      */
-    public function editorScript(): void
+    public function enqueueEditorAssets(string $hook): void
     {
+        // Only load on Gravity Forms form editor pages
+        if ($hook !== 'toplevel_page_gf_edit_forms' && $hook !== 'forms_page_gf_edit_forms') {
+            return;
+        }
+
+        // Check if we're on the form editor (not form list)
+        if (! isset($_GET['id']) || empty($_GET['id'])) {
+            return;
+        }
+
         $presets = self::getPresets();
         $fieldTypes = $this->getSupportedFieldTypes();
         
-        // Enqueue the admin field editor script
-        wp_enqueue_script(
+        // Enqueue the already-registered script
+        wp_enqueue_script('gf-regex-validation-admin');
+        
+        // Add inline data before the script
+        wp_add_inline_script(
             'gf-regex-validation-admin',
-            \GF_REGEX_VALIDATION_URL . 'assets/js/admin-field-editor.js',
-            ['jquery', 'gform_form_editor'],
-            \GF_REGEX_VALIDATION_VERSION,
-            true
+            sprintf(
+                'window.gfRegexValidation = window.gfRegexValidation || {}; window.gfRegexValidation.presets = %s; window.gfRegexValidation.fieldTypes = %s;',
+                wp_json_encode($presets),
+                wp_json_encode($fieldTypes)
+            ),
+            'before'
         );
-        
-        // Add inline data for presets and field types
-        $inlineScript = sprintf(
-            'window.gfRegexValidation = window.gfRegexValidation || {}; window.gfRegexValidation.presets = %s; window.gfRegexValidation.fieldTypes = %s;',
-            wp_json_encode($presets),
-            wp_json_encode($fieldTypes)
-        );
-        
-        wp_add_inline_script('gf-regex-validation-admin', $inlineScript, 'before');
     }
 
     /**
