@@ -2,4 +2,3 @@
 /node_modules/
 .phpunit.cache/
 .phpunit.result.cache
-bun.lockb
