@@ -24,6 +24,7 @@ if (! defined('ABSPATH')) {
 define('GF_REGEX_VALIDATION_VERSION', '1.0.1');
 define('GF_REGEX_VALIDATION_FILE', __FILE__);
 define('GF_REGEX_VALIDATION_DIR', plugin_dir_path(__FILE__));
+define('GF_REGEX_VALIDATION_URL', plugin_dir_url(__FILE__));
 
 /**
  * Load Composer autoloader.

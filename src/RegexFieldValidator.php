@@ -155,52 +155,24 @@ class RegexFieldValidator
     {
         $presets = self::getPresets();
         $fieldTypes = $this->getSupportedFieldTypes();
-        ?>
-        <script type='text/javascript'>
-            // Add setting to supported field types
-            <?php foreach ($fieldTypes as $type) { ?>
-            if (typeof fieldSettings.<?php echo esc_js($type); ?> !== 'undefined') {
-                fieldSettings.<?php echo esc_js($type); ?> += ', .regex_validation_setting';
-            }
-            <?php } ?>
-
-            // Bind to the load field settings event
-            jQuery(document).on('gform_load_field_settings', function(event, field, form) {
-                jQuery('#field_regex_pattern').val(field.regexPattern || '');
-                jQuery('#field_regex_message').val(field.regexMessage || '');
-
-                // Set preset dropdown
-                const presets = <?php echo wp_json_encode($presets); ?>;
-                let selectedPreset = '';
-
-                for (const [key, preset] of Object.entries(presets)) {
-                    if (field.regexPattern === preset.pattern) {
-                        selectedPreset = key;
-                        break;
-                    }
-                }
-
-                jQuery('#field_regex_preset').val(selectedPreset);
-            });
-
-            // Function to set preset values
-            function SetRegexPreset(presetKey) {
-                if (!presetKey) {
-                    return;
-                }
-
-                const presets = <?php echo wp_json_encode($presets); ?>;
-                const preset = presets[presetKey];
-
-                if (preset) {
-                    SetFieldProperty('regexPattern', preset.pattern);
-                    SetFieldProperty('regexMessage', preset.message);
-                    jQuery('#field_regex_pattern').val(preset.pattern);
-                    jQuery('#field_regex_message').val(preset.message);
-                }
-            }
-        </script>
-        <?php
+        
+        // Enqueue the admin field editor script
+        wp_enqueue_script(
+            'gf-regex-validation-admin',
+            \GF_REGEX_VALIDATION_URL . 'assets/js/admin-field-editor.js',
+            ['jquery', 'gform_form_editor'],
+            \GF_REGEX_VALIDATION_VERSION,
+            true
+        );
+        
+        // Add inline data for presets and field types
+        $inlineScript = sprintf(
+            'window.gfRegexValidation = window.gfRegexValidation || {}; window.gfRegexValidation.presets = %s; window.gfRegexValidation.fieldTypes = %s;',
+            wp_json_encode($presets),
+            wp_json_encode($fieldTypes)
+        );
+        
+        wp_add_inline_script('gf-regex-validation-admin', $inlineScript, 'before');
     }
 
     /**
