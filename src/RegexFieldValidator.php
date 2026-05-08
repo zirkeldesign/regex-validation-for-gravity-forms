@@ -120,7 +120,7 @@ class RegexFieldValidator
             \GF_REGEX_VALIDATION_URL.'assets/js/admin-field-editor.js',
             ['jquery', 'gform_form_editor'],
             \GF_REGEX_VALIDATION_VERSION,
-            false
+            true
         );
     }
 

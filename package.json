@@ -1,6 +1,6 @@
 {
 	"name": "@zirkeldesign/regex-validation-for-gravity-forms",
-	"version": "1.0.2",
+	"version": "1.0.4",
 	"description": "Add regex validation to Gravity Forms fields with preset patterns",
 	"scripts": {
 		"format": "prettier --write \"assets/js/**/*.js\"",

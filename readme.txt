@@ -4,7 +4,7 @@ Tags: gravity forms, regex, validation, unicode, pattern
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 8.3
-Stable tag: 1.0.2
+Stable tag: 1.0.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,6 +106,9 @@ Client-side validation provides instant user feedback but should never be relied
 3. Client-side validation error message
 
 == Changelog ==
+
+= 1.0.4 =
+* Fixed: Prevented a form editor JavaScript error by loading plugin admin scripts at the correct time
 
 = 1.0.2 =
 * Fixed: Admin field settings not appearing in Gravity Forms editor
