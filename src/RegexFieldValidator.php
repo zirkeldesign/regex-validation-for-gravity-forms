@@ -20,6 +20,7 @@ class RegexFieldValidator
     private const DEFAULT_FIELD_TYPES = [
         'text',
         'name',
+        'address',
         'email',
         'phone',
         'website',
@@ -115,9 +116,10 @@ class RegexFieldValidator
 
         // Register admin field editor script
         // Depend on gform_form_editor to ensure fieldSettings is available
+        $script_suffix = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? '' : '.min';
         wp_register_script(
             'gf-regex-validation-admin',
-            \GF_REGEX_VALIDATION_URL.'assets/js/admin-field-editor.js',
+            \GF_REGEX_VALIDATION_URL."dist/js/admin-field-editor{$script_suffix}.js",
             ['jquery', 'gform_form_editor'],
             \GF_REGEX_VALIDATION_VERSION,
             true
@@ -149,47 +151,120 @@ class RegexFieldValidator
             return;
         }
 
+        $compoundPresets = CompoundFieldPresets::getCompoundPresets();
+        $inputPresets = CompoundFieldPresets::getInputPresets();
+        $nameInputs = CompoundFieldPresets::getNameInputStructure();
+        $addressInputs = CompoundFieldPresets::getAddressInputStructure();
+
         ?>
         <li class="regex_validation_setting field_setting">
-            <label for="field_regex_preset" class="section_label">
+            <label for="field_regex_mode" class="section_label">
                 <?php esc_html_e('Regex Validation', 'regex-validation-for-gravity-forms'); ?>
                 <?php gform_tooltip('form_field_regex_validation'); ?>
             </label>
 
-            <select id="field_regex_preset" onchange="SetRegexPreset(this.value);">
-                <option value=""><?php esc_html_e('Custom Regex', 'regex-validation-for-gravity-forms'); ?></option>
-                <?php foreach (self::getPresets() as $key => $preset) { ?>
-                    <option value="<?php echo esc_attr($key); ?>">
-                        <?php echo esc_html($preset['label']); ?>
-                    </option>
-                <?php } ?>
-            </select>
+            <!-- Mode Toggle -->
+            <div class="regex_mode_toggle" style="margin-bottom: 15px;">
+                <input type="radio" id="regex_mode_simple" name="regex_mode" value="simple" checked onclick="SetRegexMode('simple');" />
+                <label for="regex_mode_simple" style="display: inline; margin-right: 15px;">
+                    <?php esc_html_e('Simple Mode', 'regex-validation-for-gravity-forms'); ?>
+                </label>
+                
+                <input type="radio" id="regex_mode_advanced" name="regex_mode" value="advanced" onclick="SetRegexMode('advanced');" />
+                <label for="regex_mode_advanced" style="display: inline;">
+                    <?php esc_html_e('Advanced Mode (Per-Input)', 'regex-validation-for-gravity-forms'); ?>
+                </label>
+            </div>
 
-            <label for="field_regex_pattern" style="margin-top: 10px; display: block;">
-                <?php esc_html_e('Regex Pattern', 'regex-validation-for-gravity-forms'); ?>
-            </label>
-            <input
-                type="text"
-                id="field_regex_pattern"
-                class="fieldwidth-3"
-                placeholder="/^[\p{L}\s]+$/u"
-                onkeyup="SetFieldProperty('regexPattern', this.value);"
-            />
-            <small style="display: block; margin-top: 5px; color: #666;">
-                <?php esc_html_e('Use Unicode flag (/u) for international character support', 'regex-validation-for-gravity-forms'); ?>
-            </small>
+            <!-- Simple Mode Container -->
+            <div id="regex_simple_mode_container" style="display: block;">
+                <select id="field_regex_preset" onchange="SetRegexPreset(this.value);">
+                    <option value=""><?php esc_html_e('Custom Regex', 'regex-validation-for-gravity-forms'); ?></option>
+                    <optgroup label="<?php esc_attr_e('Single Field Presets', 'regex-validation-for-gravity-forms'); ?>">
+                        <?php foreach (self::getPresets() as $key => $preset) { ?>
+                            <option value="<?php echo esc_attr($key); ?>">
+                                <?php echo esc_html($preset['label']); ?>
+                            </option>
+                        <?php } ?>
+                    </optgroup>
+                    <optgroup label="<?php esc_attr_e('Compound Field Presets (All Inputs)', 'regex-validation-for-gravity-forms'); ?>">
+                        <?php foreach ($compoundPresets as $key => $preset) { ?>
+                            <option value="compound_<?php echo esc_attr($key); ?>" data-type="<?php echo esc_attr($preset['type']); ?>">
+                                <?php echo esc_html($preset['label']); ?>
+                            </option>
+                        <?php } ?>
+                    </optgroup>
+                </select>
 
-            <label for="field_regex_message" style="margin-top: 10px; display: block;">
-                <?php esc_html_e('Validation Message', 'regex-validation-for-gravity-forms'); ?>
-            </label>
-            <input
-                type="text"
-                id="field_regex_message"
-                class="fieldwidth-3"
-                placeholder="<?php esc_attr_e('Please enter a valid value', 'regex-validation-for-gravity-forms'); ?>"
-                onkeyup="SetFieldProperty('regexMessage', this.value);"
-            />
+                <label for="field_regex_pattern" style="margin-top: 10px; display: block;">
+                    <?php esc_html_e('Regex Pattern', 'regex-validation-for-gravity-forms'); ?>
+                </label>
+                <input
+                    type="text"
+                    id="field_regex_pattern"
+                    class="fieldwidth-3"
+                    placeholder="/^[\p{L}\s]+$/u"
+                    onkeyup="SetFieldProperty('regexPattern', this.value);"
+                />
+                <small style="display: block; margin-top: 5px; color: #666;">
+                    <?php esc_html_e('Use Unicode flag (/u) for international character support', 'regex-validation-for-gravity-forms'); ?>
+                </small>
+
+                <label for="field_regex_message" style="margin-top: 10px; display: block;">
+                    <?php esc_html_e('Validation Message', 'regex-validation-for-gravity-forms'); ?>
+                </label>
+                <input
+                    type="text"
+                    id="field_regex_message"
+                    class="fieldwidth-3"
+                    placeholder="<?php esc_attr_e('Please enter a valid value', 'regex-validation-for-gravity-forms'); ?>"
+                    onkeyup="SetFieldProperty('regexMessage', this.value);"
+                />
+            </div>
+
+            <!-- Advanced Mode Container -->
+            <div id="regex_advanced_mode_container" style="display: none;">
+                <p style="margin: 10px 0; color: #666;">
+                    <?php esc_html_e('Configure different validation patterns for each input in this field.', 'regex-validation-for-gravity-forms'); ?>
+                </p>
+
+                <!-- Compound Field Preset Selector for Advanced Mode -->
+                <div style="margin-bottom: 15px;">
+                    <label for="field_regex_advanced_preset" style="display: block; margin-bottom: 5px;">
+                        <?php esc_html_e('Quick Start Preset', 'regex-validation-for-gravity-forms'); ?>
+                    </label>
+                    <select id="field_regex_advanced_preset" onchange="ApplyAdvancedPreset(this.value);">
+                        <option value=""><?php esc_html_e('-- Select a preset --', 'regex-validation-for-gravity-forms'); ?></option>
+                        <?php foreach ($compoundPresets as $key => $preset) { ?>
+                            <option value="<?php echo esc_attr($key); ?>" data-type="<?php echo esc_attr($preset['type']); ?>">
+                                <?php echo esc_html($preset['label']); ?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                </div>
+
+                <!-- Dynamic Input Configuration Area -->
+                <div id="regex_advanced_inputs_container">
+                    <!-- This will be populated dynamically by JavaScript based on field type -->
+                </div>
+
+                <button type="button" class="button" onclick="AddAdvancedInput();" style="margin-top: 10px;">
+                    <?php esc_html_e('+ Add Input Pattern', 'regex-validation-for-gravity-forms'); ?>
+                </button>
+            </div>
+
+            <!-- Hidden field to store advanced patterns as JSON -->
+            <input type="hidden" id="field_regex_patterns" value="" />
         </li>
+
+        <script type="text/javascript">
+            // Store presets and input structures for JavaScript
+            window.gfRegexValidation = window.gfRegexValidation || {};
+            window.gfRegexValidation.compoundPresets = <?php echo wp_json_encode($compoundPresets); ?>;
+            window.gfRegexValidation.inputPresets = <?php echo wp_json_encode($inputPresets); ?>;
+            window.gfRegexValidation.nameInputs = <?php echo wp_json_encode($nameInputs); ?>;
+            window.gfRegexValidation.addressInputs = <?php echo wp_json_encode($addressInputs); ?>;
+        </script>
         <?php
     }
 
@@ -255,6 +330,9 @@ class RegexFieldValidator
     /**
      * Validate field against regex pattern (server-side)
      *
+     * Supports both simple mode (single pattern for all inputs) and advanced mode
+     * (per-input patterns for compound fields like Name and Address).
+     *
      * @param  array{is_valid: bool, message: string}  $result
      * @param  array<string, mixed>  $form
      * @return array{is_valid: bool, message: string}
@@ -265,6 +343,26 @@ class RegexFieldValidator
             return $result;
         }
 
+        // Check if using advanced mode (per-input patterns)
+        $advancedPatterns = $field->regexPatterns ?? null;
+
+        if (! empty($advancedPatterns) && is_array($advancedPatterns)) {
+            return $this->validateAdvancedMode($result, $value, $form, $field, $advancedPatterns);
+        }
+
+        // Fall back to simple mode (single pattern for all inputs)
+        return $this->validateSimpleMode($result, $value, $form, $field);
+    }
+
+    /**
+     * Validate using simple mode (single pattern for all inputs)
+     *
+     * @param  array{is_valid: bool, message: string}  $result
+     * @param  array<string, mixed>  $form
+     * @return array{is_valid: bool, message: string}
+     */
+    private function validateSimpleMode(array $result, mixed $value, array $form, object $field): array
+    {
         $pattern = $field->regexPattern ?? '';
 
         if (empty($pattern)) {
@@ -305,7 +403,110 @@ class RegexFieldValidator
     }
 
     /**
+     * Validate using advanced mode (per-input patterns for compound fields)
+     *
+     * @param  array{is_valid: bool, message: string}  $result
+     * @param  array<string, mixed>  $form
+     * @param  array<string, array{pattern: string, message: string}>  $patterns
+     * @return array{is_valid: bool, message: string}
+     */
+    private function validateAdvancedMode(array $result, mixed $value, array $form, object $field, array $patterns): array
+    {
+        // For non-array values (shouldn't happen with compound fields, but handle gracefully)
+        if (! is_array($value)) {
+            return $result;
+        }
+
+        $hasError = false;
+        $errorMessage = '';
+
+        // Iterate through each configured input pattern
+        foreach ($patterns as $inputNumber => $config) {
+            // Get the input value using the full input ID (field.input)
+            $inputId = $field->id.'.'.$inputNumber;
+            $inputValue = rgar($value, $inputId);
+
+            // Skip validation if:
+            // 1. Input is hidden
+            // 2. Input value is empty (we don't validate empty values)
+            if ($this->isInputHidden($field, $inputNumber) || empty($inputValue)) {
+                continue;
+            }
+
+            $pattern = $config['pattern'];
+            $message = $config['message'];
+
+            // Validate the pattern syntax
+            if (empty($pattern) || ! self::isValidRegex($pattern)) {
+                _doing_it_wrong(
+                    __METHOD__,
+                    sprintf(
+                        /* translators: 1: input number, 2: field ID */
+                        esc_html__('Invalid regex pattern for input %1$s on field ID %2$d.', 'regex-validation-for-gravity-forms'),
+                        esc_html($inputNumber),
+                        absint($field->id)
+                    ),
+                    '1.0.0'
+                );
+
+                continue;
+            }
+
+            // Trim and validate the input value
+            $inputValue = trim($inputValue);
+
+            if ($inputValue !== '' && ! preg_match($pattern, $inputValue)) {
+                $hasError = true;
+                $errorMessage = $message;
+
+                // Mark this specific input as invalid (GF 2.5.10+)
+                if (method_exists($field, 'set_input_validation_state')) {
+                    $field->set_input_validation_state($inputNumber, false);
+                }
+
+                // Stop on first error
+                break;
+            }
+        }
+
+        if ($hasError) {
+            $result['is_valid'] = false;
+            $result['message'] = $errorMessage;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Check if a specific input within a compound field is hidden
+     *
+     * @param  object  $field  The field object
+     * @param  string  $inputNumber  The input number (e.g., '1', '3', '5')
+     */
+    private function isInputHidden(object $field, string $inputNumber): bool
+    {
+        if (! isset($field->inputs) || ! is_array($field->inputs)) {
+            return false;
+        }
+
+        foreach ($field->inputs as $input) {
+            // Extract the input number from the full ID (e.g., '5.1' -> '1')
+            $inputId = (string) ($input['id'] ?? '');
+            $parts = explode('.', $inputId);
+            $currentInputNumber = end($parts);
+
+            if ($currentInputNumber === $inputNumber) {
+                return ! empty($input['isHidden']);
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Enqueue client-side regex validation script
+     *
+     * Supports both simple mode (single pattern) and advanced mode (per-input patterns).
      *
      * @param  array<string, mixed>  $form
      * @return array<string, mixed>
@@ -319,6 +520,19 @@ class RegexFieldValidator
                 continue;
             }
 
+            // Check for advanced mode (per-input patterns)
+            $advancedPatterns = $field->regexPatterns ?? null;
+
+            if (! empty($advancedPatterns) && is_array($advancedPatterns)) {
+                $fieldConfig = $this->prepareAdvancedFieldConfig($field, $advancedPatterns);
+                if ($fieldConfig !== null) {
+                    $fieldsWithRegex[] = $fieldConfig;
+                }
+
+                continue;
+            }
+
+            // Fall back to simple mode
             $pattern = $field->regexPattern ?? '';
 
             if (empty($pattern)) {
@@ -334,6 +548,7 @@ class RegexFieldValidator
             $fieldsWithRegex[] = [
                 'id' => $field->id,
                 'type' => $field->type,
+                'mode' => 'simple',
                 'pattern' => $jsPattern,
                 'message' => ! empty($field->regexMessage)
                     ? $field->regexMessage
@@ -356,39 +571,78 @@ class RegexFieldValidator
                 var fieldWrapper = document.querySelector('#field_<?php echo absint($formId); ?>_' + fieldConfig.id);
                 if (!fieldWrapper) return;
 
-                var inputs = fieldWrapper.querySelectorAll('input:not([type=hidden])');
-                var regex;
+                if (fieldConfig.mode === 'advanced') {
+                    // Advanced mode: per-input validation
+                    fieldConfig.inputs.forEach(function(inputConfig) {
+                        var input = document.getElementById('input_<?php echo absint($formId); ?>_' + fieldConfig.id + '_' + inputConfig.inputNumber);
+                        if (!input) return;
 
-                try {
-                    regex = new RegExp(fieldConfig.pattern, 'u');
-                } catch (e) {
-                    return;
-                }
-
-                inputs.forEach(function(input) {
-                    input.addEventListener('change', function() {
-                        var wrapper = this.closest('.gfield');
-                        var msgId = 'regex_validation_message_' + fieldConfig.id + '_' + this.id;
-                        var existingMsg = document.getElementById(msgId);
-
-                        if (this.value === '' || regex.test(this.value)) {
-                            if (existingMsg) existingMsg.remove();
-                            if (wrapper && !wrapper.querySelector('.validation_message')) {
-                                wrapper.classList.remove('gfield_error');
-                            }
-                        } else {
-                            if (!existingMsg) {
-                                var msg = document.createElement('div');
-                                msg.id = msgId;
-                                msg.className = 'validation_message gfield_description';
-                                msg.setAttribute('role', 'alert');
-                                msg.textContent = fieldConfig.message;
-                                this.parentNode.insertBefore(msg, this.nextSibling);
-                            }
-                            if (wrapper) wrapper.classList.add('gfield_error');
+                        var regex;
+                        try {
+                            regex = new RegExp(inputConfig.pattern, 'u');
+                        } catch (e) {
+                            return;
                         }
+
+                        input.addEventListener('change', function() {
+                            var wrapper = this.closest('.gfield');
+                            var msgId = 'regex_validation_message_' + fieldConfig.id + '_' + inputConfig.inputNumber;
+                            var existingMsg = document.getElementById(msgId);
+
+                            if (this.value === '' || regex.test(this.value)) {
+                                if (existingMsg) existingMsg.remove();
+                                if (wrapper && !wrapper.querySelector('.validation_message')) {
+                                    wrapper.classList.remove('gfield_error');
+                                }
+                            } else {
+                                if (!existingMsg) {
+                                    var msg = document.createElement('div');
+                                    msg.id = msgId;
+                                    msg.className = 'validation_message gfield_description';
+                                    msg.setAttribute('role', 'alert');
+                                    msg.textContent = inputConfig.message;
+                                    this.parentNode.insertBefore(msg, this.nextSibling);
+                                }
+                                if (wrapper) wrapper.classList.add('gfield_error');
+                            }
+                        });
                     });
-                });
+                } else {
+                    // Simple mode: all inputs use the same pattern
+                    var inputs = fieldWrapper.querySelectorAll('input:not([type=hidden])');
+                    var regex;
+
+                    try {
+                        regex = new RegExp(fieldConfig.pattern, 'u');
+                    } catch (e) {
+                        return;
+                    }
+
+                    inputs.forEach(function(input) {
+                        input.addEventListener('change', function() {
+                            var wrapper = this.closest('.gfield');
+                            var msgId = 'regex_validation_message_' + fieldConfig.id + '_' + this.id;
+                            var existingMsg = document.getElementById(msgId);
+
+                            if (this.value === '' || regex.test(this.value)) {
+                                if (existingMsg) existingMsg.remove();
+                                if (wrapper && !wrapper.querySelector('.validation_message')) {
+                                    wrapper.classList.remove('gfield_error');
+                                }
+                            } else {
+                                if (!existingMsg) {
+                                    var msg = document.createElement('div');
+                                    msg.id = msgId;
+                                    msg.className = 'validation_message gfield_description';
+                                    msg.setAttribute('role', 'alert');
+                                    msg.textContent = fieldConfig.message;
+                                    this.parentNode.insertBefore(msg, this.nextSibling);
+                                }
+                                if (wrapper) wrapper.classList.add('gfield_error');
+                            }
+                        });
+                    });
+                }
             });
             <?php
             $script = ob_get_clean();
@@ -397,6 +651,50 @@ class RegexFieldValidator
         });
 
         return $form;
+    }
+
+    /**
+     * Prepare field configuration for advanced mode client-side validation
+     *
+     * @param  array<string, array{pattern: string, message: string}>  $patterns
+     * @return array<string, mixed>|null
+     */
+    private function prepareAdvancedFieldConfig(object $field, array $patterns): ?array
+    {
+        $inputs = [];
+
+        foreach ($patterns as $inputNumber => $config) {
+            // Skip if input is hidden
+            if ($this->isInputHidden($field, $inputNumber)) {
+                continue;
+            }
+
+            $pattern = $config['pattern'];
+            $message = $config['message'];
+
+            $jsPattern = self::phpRegexToJs($pattern);
+
+            if ($jsPattern === null) {
+                continue;
+            }
+
+            $inputs[] = [
+                'inputNumber' => $inputNumber,
+                'pattern' => $jsPattern,
+                'message' => $message,
+            ];
+        }
+
+        if (empty($inputs)) {
+            return null;
+        }
+
+        return [
+            'id' => $field->id,
+            'type' => $field->type,
+            'mode' => 'advanced',
+            'inputs' => $inputs,
+        ];
     }
 
     private function shouldValidateField(object $field): bool

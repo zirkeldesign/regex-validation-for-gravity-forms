@@ -1,14 +1,18 @@
 {
 	"name": "@zirkeldesign/regex-validation-for-gravity-forms",
-	"version": "1.0.4",
+	"version": "1.1.0",
 	"description": "Add regex validation to Gravity Forms fields with preset patterns",
 	"scripts": {
+		"dev": "vite build --watch --mode development",
+		"build": "vite build --mode development && vite build --mode production",
 		"format": "prettier --write \"assets/js/**/*.js\"",
 		"format:check": "prettier --check \"assets/js/**/*.js\""
 	},
 	"devDependencies": {
-		"@wordpress/prettier-config": "^4.40.0",
-		"prettier": "npm:wp-prettier@^3.0.3"
+		"@wordpress/prettier-config": "^4.45.0",
+		"prettier": "npm:wp-prettier@^3.0.3",
+		"terser": "^5.47.1",
+		"vite": "^6.4.2"
 	},
 	"prettier": "@wordpress/prettier-config"
 }

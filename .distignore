@@ -3,12 +3,12 @@
 .gitignore
 .distignore
 .editorconfig
+.phpactor.json
 .prettierignore
 .phpunit.cache/
 .phpunit.result.cache
 .claude/
 .vscode/
-dist/
 AGENTS.md
 CHANGELOG.md
 README.md
@@ -23,3 +23,7 @@ phpstan.neon
 tests/
 node_modules/
 .DS_Store
+vite.config.js
+assets/js/
+dist/*.zip
+dist/js/*.map

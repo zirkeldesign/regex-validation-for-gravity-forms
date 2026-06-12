@@ -2,9 +2,9 @@
 Contributors: zirkeldesign, dsturm
 Tags: gravity forms, regex, validation, unicode, pattern
 Requires at least: 6.0
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 8.3
-Stable tag: 1.0.4
+Stable tag: 1.1.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,6 +106,15 @@ Client-side validation provides instant user feedback but should never be relied
 3. Client-side validation error message
 
 == Changelog ==
+
+= 1.1.0 =
+* Added: Advanced Mode for Name and Address fields — set a different validation rule for each input (e.g. validate ZIP codes differently than city names)
+* Added: Support for Address fields, with presets for US, German, Canadian, and International addresses
+* Added: Smart preset suggestions based on the field type you're editing
+* Added: More built-in presets for ZIP codes, postal codes, state abbreviations and other common patterns
+* Fixed: Name fields no longer apply the same rule to every input (Prefix, First Name, Last Name, etc.)
+* Fixed: Hidden inputs in Name and Address fields are no longer validated
+* Improved: Field editor styling now matches the Gravity Forms design, and admin scripts load faster
 
 = 1.0.4 =
 * Fixed: Prevented a form editor JavaScript error by loading plugin admin scripts at the correct time
