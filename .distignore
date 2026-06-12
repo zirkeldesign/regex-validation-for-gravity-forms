@@ -21,6 +21,7 @@ pint.json
 phpunit.xml
 phpstan.neon
 tests/
+bin/
 node_modules/
 .DS_Store
 vite.config.js

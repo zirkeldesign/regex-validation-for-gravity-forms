@@ -69,6 +69,7 @@
     "format": "pint",
     "format:test": "pint --test",
     "phpstan": "phpstan analyse --memory-limit=1G",
-    "test": "pest"
+    "test": "pest",
+    "pcp": "bash bin/plugin-check.sh"
   }
 }
