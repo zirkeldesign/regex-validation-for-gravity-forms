@@ -16,6 +16,7 @@
  */
 
 declare(strict_types=1);
+use ZirkelDesign\GFRegexValidation\RegexFieldValidator;
 
 if (! defined('ABSPATH')) {
     exit;
@@ -55,5 +56,5 @@ add_action('plugins_loaded', static function (): void {
         return;
     }
 
-    new \ZirkelDesign\GFRegexValidation\RegexFieldValidator;
+    new RegexFieldValidator;
 });
