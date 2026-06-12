@@ -1,5 +1,5 @@
 === Regex Validation for Gravity Forms ===
-Contributors: zirkeldesign, dsturm
+Contributors: dsturm
 Tags: gravity forms, regex, validation, unicode, pattern
 Requires at least: 6.0
 Tested up to: 7.0
