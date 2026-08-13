@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use ZirkelDesign\GFRegexValidation\CompoundFieldPresets;
 use ZirkelDesign\GFRegexValidation\RegexFieldValidator;
 
 describe('phpRegexToJs', function () {

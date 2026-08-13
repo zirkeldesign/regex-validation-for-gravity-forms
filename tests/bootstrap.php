@@ -5,6 +5,16 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 /**
+ * The plugin's classes guard against direct file access with
+ * `if (! defined('ABSPATH')) { exit; }`. Without this constant the very first
+ * autoloaded class terminates the test runner with exit code 0 — a green,
+ * empty run.
+ */
+if (! defined('ABSPATH')) {
+    define('ABSPATH', dirname(__DIR__) . '/');
+}
+
+/**
  * Stub WordPress functions for unit testing.
  */
 if (! function_exists('__')) {

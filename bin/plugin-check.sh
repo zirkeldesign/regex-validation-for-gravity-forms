@@ -3,8 +3,9 @@
 # Run the real WordPress.org Plugin Check against the BUILT zip, using a
 # throwaway WordPress install backed by SQLite (no MySQL, no existing site).
 #
-# Usage: composer pcp            # builds the zip, then checks it
-#        bin/plugin-check.sh     # same, run directly
+# Usage: composer pcp                      # builds the zip, then checks it
+#        bin/plugin-check.sh               # same, run directly
+#        WP_VERSION=7.1-RC3 composer pcp   # check against a specific core
 #
 # Requires: wp-cli, php with pdo_sqlite, curl, unzip, network access.
 
@@ -17,8 +18,11 @@ cd "$PLUGIN_DIR"
 VERSION="$(php get-version.php)"
 ZIP="$PLUGIN_DIR/dist/${SLUG}-${VERSION}.zip"
 
-# WP version to test against = readme.txt "Tested up to" (fallback: latest).
-WP_VERSION="$(grep -i '^Tested up to:' readme.txt | sed 's/.*: *//' | tr -d '[:space:]' || true)"
+# WP version to test against. Override with WP_VERSION to try a release
+# candidate before readme.txt claims compatibility with it.
+if [ -z "${WP_VERSION:-}" ]; then
+  WP_VERSION="$(grep -i '^Tested up to:' readme.txt | sed 's/.*: *//' | tr -d '[:space:]' || true)"
+fi
 [ -z "${WP_VERSION:-}" ] && WP_VERSION="latest"
 
 echo "🔨 Building distribution archive..."
@@ -51,7 +55,7 @@ curl -sL https://downloads.wordpress.org/plugin/plugin-check.zip -o "/tmp/pcp-pc
 unzip -q -o "/tmp/pcp-pc.$$.zip" -d "$WPDIR/wp-content/plugins/"
 wp plugin activate plugin-check --path="$WPDIR" >/dev/null 2>&1
 
-echo "🔎 Running Plugin Check on ${SLUG} ${VERSION} ..."
+echo "🔎 Running Plugin Check on ${SLUG} ${VERSION} against WordPress ${WP_VERSION} ..."
 RESULT="$(wp plugin check "$SLUG" --path="$WPDIR" --format=json 2>/dev/null || true)"
 
 # A clean result has no matches; grep returning non-zero must not trip `set -e`.

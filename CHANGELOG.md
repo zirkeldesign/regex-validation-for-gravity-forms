@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1] - 2026-08-13
+
+### Changed
+
+- **`Tested up to: 7.1`.** Verified against WordPress 7.1-RC3 with real Gravity Forms 2.10.5: Plugin Check on the built zip reports 0 errors and 0 warnings, and the field-editor and validation hooks run without a notice of our own. None of the 7.1 breaking changes apply — the plugin registers no blocks, ships no editor JS beyond what Gravity Forms itself loads, has no runtime `@wordpress/*` dependency (`@wordpress/prettier-config` is a formatting devDependency), and does not use jQuery UI.
+
+### Fixed
+
+- **The unit suite ran zero tests and reported success.** Every class in `src/` guards against direct file access with `if (! defined('ABSPATH')) { exit; }`, but `tests/bootstrap.php` never defined `ABSPATH` — so the first autoloaded class terminated the runner with exit code 0 before a single test executed. Pest printed nothing, PHPUnit's JUnit log came out empty, and CI went green on an empty run. `tests/bootstrap.php` now defines `ABSPATH`.
+- **`tests/Unit/RegexFieldValidatorTest.php` never imported `CompoundFieldPresets`.** Invisible while the suite was a no-op; 19 of the 36 tests errored the moment it actually ran. All 36 pass now.
+
+### Added
+
+- `WP_VERSION` override in `bin/plugin-check.sh` (`WP_VERSION=7.1-RC3 composer pcp`), so a release candidate can be tested before readme.txt claims compatibility with it. Previously the target core was read from readme.txt's `Tested up to:` and could therefore never run ahead of it.
+
 ## [1.1.0] - 2026-06-12
 
 ### New Features
