@@ -2,9 +2,9 @@
 Contributors: dsturm
 Tags: gravity forms, regex, validation, unicode, pattern
 Requires at least: 6.0
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 8.3
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,6 +106,9 @@ Client-side validation provides instant user feedback but should never be relied
 3. Client-side validation error message
 
 == Changelog ==
+
+= 1.1.1 =
+* Improved: tested and confirmed compatible with WordPress 7.1.
 
 = 1.1.0 =
 * Added: Advanced Mode for Name and Address fields — set a different validation rule for each input (e.g. validate ZIP codes differently than city names)
