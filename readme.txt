@@ -1,10 +1,10 @@
 === Regex Validation for Gravity Forms ===
-Contributors: zirkeldesign, dsturm
+Contributors: zirkeldesign, d.sturm
 Tags: gravity forms, regex, validation, unicode, pattern
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.3
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,6 +106,9 @@ Client-side validation provides instant user feedback but should never be relied
 3. Client-side validation error message
 
 == Changelog ==
+
+= 1.1.2 =
+* Changed: the plugin page lists the right authors, zirkel.design and Daniel Sturm.
 
 = 1.1.1 =
 * Improved: tested and confirmed compatible with WordPress 7.1.
