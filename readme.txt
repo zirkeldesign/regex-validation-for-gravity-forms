@@ -4,7 +4,7 @@ Tags: gravity forms, regex, validation, unicode, pattern
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.3
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,6 +119,9 @@ Please open an issue on [GitHub](https://github.com/zirkeldesign/regex-validatio
 3. Client-side validation error message
 
 == Changelog ==
+
+= 1.1.3 =
+* Added: FAQ entries on how to report a security issue privately and where to send bugs and ideas.
 
 = 1.1.2 =
 * Changed: the plugin page lists the right authors, zirkel.design and Daniel Sturm.

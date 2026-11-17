@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.3] - 2026-11-17
+
+### Added
+
+- readme FAQ entries: private security reporting via GitHub Security Advisories, and where to report bugs and ideas.
+- The description lists the other zirkel.design plugins on wordpress.org.
+
 ## [1.1.2] - 2026-10-28
 
 ### Fixed
