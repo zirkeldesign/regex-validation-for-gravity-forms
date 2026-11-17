@@ -44,6 +44,11 @@ Adds custom regex validation with Unicode support and presets to Gravity Forms f
 * **Alphanumeric** — Unicode letters and numbers only
 * **No Special Characters** — Unicode letters, numbers, and spaces only
 
+= More from zirkel.design =
+
+* [Privacy CAPTCHA for Cap](https://wordpress.org/plugins/privacy-captcha-for-cap/): privacy-friendly spam protection for comments, login, WooCommerce and Gravity Forms, verified against your own Cap server.
+* [Zirkel Virtual IBAN for WooCommerce](https://wordpress.org/plugins/zirkel-iban-for-woocommerce/): unique virtual bank details per order for bank transfers in WooCommerce, reconciled automatically via Stripe.
+
 == Installation ==
 
 = From WordPress Admin =
@@ -98,6 +103,14 @@ Yes, use the `gf_regex_validation_field_types` filter:
 = Is client-side validation secure? =
 
 Client-side validation provides instant user feedback but should never be relied upon for security. This plugin always performs server-side validation as well, which cannot be bypassed.
+
+= Where do I report a security issue? =
+
+Please do not post it in an issue or the support forum. Report it privately through [GitHub security advisories](https://github.com/zirkeldesign/regex-validation-for-gravity-forms/security/advisories/new). We confirm receipt, fix it, and credit you in the changelog unless you prefer not to be named.
+
+= Found a bug or have an idea? =
+
+Please open an issue on [GitHub](https://github.com/zirkeldesign/regex-validation-for-gravity-forms/issues) or ask in the [support forum](https://wordpress.org/support/plugin/regex-validation-for-gravity-forms/).
 
 == Screenshots ==
 
