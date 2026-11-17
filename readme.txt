@@ -4,7 +4,7 @@ Tags: gravity forms, regex, validation, unicode, pattern
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.3
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,6 +43,11 @@ Adds custom regex validation with Unicode support and presets to Gravity Forms f
 * **International Phone Number** — E.164 format
 * **Alphanumeric** — Unicode letters and numbers only
 * **No Special Characters** — Unicode letters, numbers, and spaces only
+
+= More from zirkel.design =
+
+* [Privacy CAPTCHA for Cap](https://wordpress.org/plugins/privacy-captcha-for-cap/): privacy-friendly spam protection for comments, login, WooCommerce and Gravity Forms, verified against your own Cap server.
+* [Zirkel Virtual IBAN for WooCommerce](https://wordpress.org/plugins/zirkel-iban-for-woocommerce/): unique virtual bank details per order for bank transfers in WooCommerce, reconciled automatically via Stripe.
 
 == Installation ==
 
@@ -99,6 +104,14 @@ Yes, use the `gf_regex_validation_field_types` filter:
 
 Client-side validation provides instant user feedback but should never be relied upon for security. This plugin always performs server-side validation as well, which cannot be bypassed.
 
+= Where do I report a security issue? =
+
+Please do not post it in an issue or the support forum. Report it privately through [GitHub security advisories](https://github.com/zirkeldesign/regex-validation-for-gravity-forms/security/advisories/new). We confirm receipt, fix it, and credit you in the changelog unless you prefer not to be named.
+
+= Found a bug or have an idea? =
+
+Please open an issue on [GitHub](https://github.com/zirkeldesign/regex-validation-for-gravity-forms/issues) or ask in the [support forum](https://wordpress.org/support/plugin/regex-validation-for-gravity-forms/).
+
 == Screenshots ==
 
 1. Regex validation settings in the Gravity Forms field editor
@@ -106,6 +119,9 @@ Client-side validation provides instant user feedback but should never be relied
 3. Client-side validation error message
 
 == Changelog ==
+
+= 1.1.3 =
+* Added: FAQ entries on how to report a security issue privately and where to send bugs and ideas.
 
 = 1.1.2 =
 * Changed: the plugin page lists the right authors, zirkel.design and Daniel Sturm.
