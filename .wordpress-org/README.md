@@ -1,59 +1,31 @@
-# WordPress.org Plugin Assets
+# WordPress.org plugin directory assets
 
-This directory contains assets for the WordPress.org plugin directory.
+The icon and banner shown on the plugin's WordPress.org listing. They are not part of the installed plugin.
 
-## Files
+| File | Purpose |
+|---|---|
+| `icon.svg` | Vector icon, deployed as-is |
+| `icon-256x256.png`, `icon-128x128.png` | Raster icons |
+| `banner.svg` | Banner source, not deployed |
+| `banner-1544x500.png`, `banner-772x250.png` | Banners |
 
-### Icon
-- `icon.svg` - Vector icon featuring the `^.+$` regex pattern with Gravity Forms brand colors
+## Design
 
-For WordPress.org, you may also want to provide PNG versions:
-- `icon-128x128.png` - Low resolution icon
-- `icon-256x256.png` - High resolution icon (recommended)
+One system with the other zirkel.design plugins (`privacy-captcha-for-cap`, `zirkel-iban-for-woocommerce`): the plugin colour as a flat ground, a white form, and a check in a darker shade of the same colour. In the banner the plugin name and one line on the left, and on the right the product itself rather than decoration.
 
-### Banners
-- `banner-772x250.svg` - Low resolution banner (SVG)
-- `banner-1544x500.svg` - High resolution banner (SVG - 2x resolution)
+- **Colour:** `#d9481c` ground, check in `#4a1b0d`.
+- **Glyph:** the brackets of a character class with the match inside, ticked off.
+- **Banner scene:** a "Postcode" field holding `10115`, accepted, with the pattern `^\d{5}$` below it.
 
-For WordPress.org, PNG versions are also supported:
-- `banner-772x250.png` - Low resolution banner
-- `banner-1544x500.png` - High resolution banner (2x)
-
-## Colors Used
-
-- **Primary (Dark Blue):** `#0f3d6c` - Gravity Forms brand color
-- **Secondary (Orange):** `#f15a2b` - Gravity Forms brand color
-- **Text:** White with various opacity levels
-
-## Design Elements
-
-- Main feature: `^.+$` regex pattern
-- Background: Examples of common regex patterns (email, date, phone number formats)
-- Gradient: Transitions from dark blue to orange
-- Clean, professional appearance suitable for a developer tool
-
-## Converting to PNG
-
-If you need PNG versions (recommended for broader compatibility), you can convert using:
+## Regenerating the PNGs
 
 ```bash
-# Using ImageMagick (if installed)
-convert -background none -resize 256x256 icon.svg icon-256x256.png
-convert -background none -resize 128x128 icon.svg icon-128x128.png
-convert banner-772x250.svg banner-772x250.png
-convert banner-1544x500.svg banner-1544x500.png
-
-# Or using rsvg-convert (if installed)
 rsvg-convert -w 256 -h 256 icon.svg -o icon-256x256.png
 rsvg-convert -w 128 -h 128 icon.svg -o icon-128x128.png
-rsvg-convert -w 772 -h 250 banner-772x250.svg -o banner-772x250.png
-rsvg-convert -w 1544 -h 500 banner-1544x500.svg -o banner-1544x500.png
+rsvg-convert -w 1544 -h 500 banner.svg -o banner-1544x500.png
+rsvg-convert -w 772 -h 250 banner.svg -o banner-772x250.png
 ```
 
-## WordPress.org Plugin Directory
+## Deployment
 
-These assets will be automatically used by WordPress.org when you:
-1. Commit them to your SVN repository in the `assets` folder
-2. The WordPress.org plugin directory will detect and display them
-
-For more information, see: https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/
+A push to `main` that changes a file here runs `.github/workflows/deploy-assets.yml`, which commits the icon and banners to the plugin's SVN `assets/` directory. It does not touch `trunk/` or `tags/`, so it needs no release.
