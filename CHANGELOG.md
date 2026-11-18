@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.5] - 2026-12-08
+
+### Changed
+
+- Tested with WordPress 7.2. Verified against WordPress 7.2 RC1: Pint, PHPStan, 36 unit tests and Plugin Check on the built zip (0 errors, 0 warnings); the regex setting in the Gravity Forms 2.10.5 form editor. Exposure: core jQuery only in the editor script, which jQuery Migrate 3.6.0 leaves untouched.
+
 ## [1.1.4] - 2026-11-18
 
 ### Changed
