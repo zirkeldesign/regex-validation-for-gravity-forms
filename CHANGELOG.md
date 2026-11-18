@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.4] - 2026-11-18
+
+### Changed
+
+- Republished so wordpress.org picks up the 1.1.3 readme and the new icon and banner. No code changes.
+
 ## [1.1.3] - 2026-11-17
 
 ### Added
