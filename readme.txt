@@ -123,6 +123,7 @@ Please open an issue on [GitHub](https://github.com/zirkeldesign/regex-validatio
 == Changelog ==
 
 = 1.1.5 =
+* Fixed: the Regex Validation settings were missing from the form editor since version 1.1.0. Rules saved earlier kept working.
 * Improved: tested and confirmed compatible with WordPress 7.2.
 
 = 1.1.4 =
