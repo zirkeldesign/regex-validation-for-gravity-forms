@@ -15,6 +15,18 @@ jobs:
       - name: Install production dependencies
         run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      # dist/ is gitignored, so the checkout has no editor script until it is built here.
+      - name: Build JavaScript
+        run: |
+          bun install --frozen-lockfile
+          bun run build
+
+      - name: Check the built editor script
+        run: bash bin/check-built-assets.sh
+
       - name: WordPress Plugin Deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
         env:

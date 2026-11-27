@@ -2,9 +2,9 @@
 Contributors: zirkeldesign, d.sturm
 Tags: gravity forms, regex, validation, unicode, pattern
 Requires at least: 6.0
-Tested up to: 7.1
+Tested up to: 7.2
 Requires PHP: 8.3
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,7 +46,9 @@ Adds custom regex validation with Unicode support and presets to Gravity Forms f
 
 = More from zirkel.design =
 
-* [Privacy CAPTCHA for Cap](https://wordpress.org/plugins/privacy-captcha-for-cap/): privacy-friendly spam protection for comments, login, WooCommerce and Gravity Forms, verified against your own Cap server.
+* [Course Embed for Viona](https://wordpress.org/plugins/course-embed-for-viona/): embed the Viona course list of your IBB partner account with a block or a shortcode.
+* [Privacy CAPTCHA for Cap](https://wordpress.org/plugins/privacy-captcha-for-cap/): privacy-friendly spam protection for login, comments, WooCommerce and form plugins, verified against your own Cap server.
+* [Zirkel AI Image Disclosure](https://wordpress.org/plugins/zirkel-ai-image-disclosure/): a small, accessible label for AI-generated images, set automatically from their IPTC or C2PA metadata on upload.
 * [Zirkel Virtual IBAN for WooCommerce](https://wordpress.org/plugins/zirkel-iban-for-woocommerce/): unique virtual bank details per order for bank transfers in WooCommerce, reconciled automatically via Stripe.
 
 == Installation ==
@@ -119,6 +121,10 @@ Please open an issue on [GitHub](https://github.com/zirkeldesign/regex-validatio
 3. Client-side validation error message
 
 == Changelog ==
+
+= 1.1.5 =
+* Fixed: the Regex Validation settings were missing from the form editor since version 1.1.0. Rules saved earlier kept working.
+* Improved: tested and confirmed compatible with WordPress 7.2.
 
 = 1.1.4 =
 * Changed: new icon and banner on wordpress.org. No changes to the plugin itself.

@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.5] - 2026-11-27
+
+### Fixed
+
+- The Regex Validation section is back in the Gravity Forms field settings. Since 1.1.0 the release workflow deployed a checkout without building the editor script: `dist/` is gitignored and `deploy.yml` only ran `composer install`, so `dist/js/admin-field-editor.min.js` never reached wordpress.org and the setting stayed hidden. Patterns saved earlier were still enforced. The deploy and the test workflow now build the script and fail when it is missing.
+
+### Changed
+
+- Tested with WordPress 7.2. Verified against WordPress 7.2 RC1: Pint, PHPStan, 36 unit tests and Plugin Check on the built zip (0 errors, 0 warnings); the regex setting in the Gravity Forms 2.10.5 form editor. Exposure: core jQuery only in the editor script, which jQuery Migrate 3.6.0 leaves untouched.
+
 ## [1.1.4] - 2026-11-18
 
 ### Changed
